@@ -47,7 +47,7 @@ services:
     image: dpage/pgadmin4
     restart: always
     environment:
-      - PGADMIN_DEFAULT_EMAIL='task.management.admin@testxxz.com'
+      - PGADMIN_DEFAULT_EMAIL=task.management.admin@testxxz.com
       - PGADMIN_DEFAULT_PASSWORD=root
     ports:
       - '8082:80'
