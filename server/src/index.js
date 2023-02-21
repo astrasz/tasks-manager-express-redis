@@ -2,6 +2,7 @@ import express from 'express';
 import redis from 'redis';
 import { engine } from 'express-handlebars'
 import bodyParser from 'body-parser';
+import sequelize from './models/index.js';
 
 const app = express();
 const port = 5000;
@@ -57,4 +58,10 @@ app.get('/todos', async (req, res, next) => {
     })
 })
 
-app.listen(5000, () => console.log('App is running on port ' + port));
+// connect to database
+sequelize.authenticate()
+    .then(() => {
+        console.log('Database connection has been established');
+        const server = app.listen(port, () => console.log(`Server is running on port: ${port}`));
+    })
+    .catch((err) => console.log('Unable to connect to the database', err));
