@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  redis:
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+
+  nginx-server:
+    container_name: nginx-server
+    image: nginx:latest
+    restart: on-failure
+    ports:
+      - '8080:80'
+    volumes:
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+
+  node:
+    container_name: node
+    restart: always
+    build:
+      dockerfile: ./node/Dockerfile
+    ports:
+      - '8081:5000'
+    volumes:
+      - ./server:/server
+      # - /server/node_modules
+    stdin_open: true
+    tty: true
+
+  db:
+    container_name: postgres
+    restart: always
+    image: postgres:alpine
+    volumes:
+      - data:/data/db
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=task-management
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL='task.management.admin@testxxz.com'
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+      - '8082:80'
+
+volumes:
+  data: {}
