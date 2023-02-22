@@ -1,26 +1,28 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 import { Sequelize } from 'sequelize';
 import { configSettings } from '../config/config.js';
 
+import getUserModel from './user.js';
+import getTaskModel from './task.js';
 
 const env = process.env.NODE_ENV ?? 'dev'
 const config = configSettings[env];
 
-const sequelize = new Sequelize({
-    database: config.database,
-    dialect: config.dialect,
-    username: config.username,
-    password: config.password,
+
+const sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
-    models: [__dirname + '/*.js'],
-    modelMatch: (filename, member) => {
-        return filename.substring(0, filename.indexOf('.')) === member.toLowerCase();
+    dialect: config.dialect
+})
+
+const models = {
+    User: getUserModel(sequelize, Sequelize),
+    Task: getTaskModel(sequelize, Sequelize)
+}
+
+Object.keys(models).forEach((key) => {
+    if (models[key].associate) {
+        models[key].associate(models);
     }
-});
+})
 
-export default sequelize;
-
+export { sequelize };
+export default models;
