@@ -25,7 +25,7 @@ services:
       - '8081:5000'
     volumes:
       - ./server:/server
-      # - /server/node_modules
+      - /server/node_modules
     stdin_open: true
     tty: true
 
