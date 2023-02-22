@@ -1,24 +1,18 @@
 import express from 'express';
-import redis from 'redis';
 import { engine } from 'express-handlebars'
 import bodyParser from 'body-parser';
-import { sequelize } from './models/index.js';
+import { sequelize } from './models/sequelize.js';
+import cookieParser from 'cookie-parser';
+import routes from './routes/routes.js'
+import redisClient from './services/redis.js';
+import { DEFAULT_EXPIRATION } from './services/redis.js';
+import errorHandler from './middlewares/errorHandler.js';
 
 const app = express();
 const port = 5000;
 
-// redis
-const redisClient = redis.createClient({
-    legacyMode: true,
-    socket: {
-        host: 'redis',
-        port: 6379
-    }
-})
-
-redisClient.connect().then(() => console.log('Redis connected')).catch(console.error);
-
-const DEFAULT_EXPIRATION = 3600;
+// cookie
+app.use(cookieParser());
 
 // view engine
 app.engine('handlebars', engine({ defaultLayout: 'main' }));
@@ -29,7 +23,10 @@ app.set('views', './src/views');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.get('/todos', async (req, res, next) => {
+// routes
+app.use(routes);
+
+app.get('/', async (req, res, next) => {
     const todoId = req.query.todoId;
 
     redisClient.get('todos', async (error, todos) => {
@@ -57,6 +54,8 @@ app.get('/todos', async (req, res, next) => {
         res.json(data);
     })
 })
+
+app.use(errorHandler);
 
 sequelize.sync({ force: true })
     .then(() => {
