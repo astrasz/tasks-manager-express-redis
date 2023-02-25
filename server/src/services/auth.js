@@ -1,7 +1,8 @@
-import bcrypt from 'bcrypt';
 import { Op } from 'sequelize';
 import CustomError from '../errors/customError.js';
 import models from '../models/sequelize.js';
+import bcrypt from 'bcryptjs'
+
 
 
 class AuthService {
@@ -59,6 +60,13 @@ class AuthService {
             password: hashedPass
         })
         return user;
+    }
+
+    verifyPassword(password, userPassword, cb) {
+        bcrypt.compare(password, userPassword, (err, isValid) => {
+            if (err) throw err;
+            cb(null, isValid);
+        })
     }
 
 }

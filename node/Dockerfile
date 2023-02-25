@@ -1,14 +1,15 @@
 FROM node:18.12-alpine
-ENV NODE_ENV dev
+# ENV NODE_ENV dev
 
 WORKDIR /server
 
-COPY ../../server/package.json .
-COPY ../../server/package-lock.json .
+COPY ../server/package.json .
+COPY ../server/package-lock.json .
 
-COPY ../../server/ .
-
+# RUN npm cache clean --force && rm -rf node_modules && npm install
 RUN npm install
+
+COPY ../server/ .
 
 EXPOSE 5000
 

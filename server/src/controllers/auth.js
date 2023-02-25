@@ -1,15 +1,37 @@
 import authService from '../services/auth.js'
+import passport from 'passport';
 
 export const showSignupForm = (req, res, next) => {
-    res.render('signup');
+
+    if (req.user) {
+        return res.redirect('/');
+    }
+
+    res.render('signup', {
+        loggedIn: false
+    });
 }
 
 export const showSigninForm = (req, res, next) => {
 
-    const { message } = req.query
+    if (req.user) {
+        return res.redirect('/');
+    }
 
-    res.render('signin', {
-        message
+    let { message } = req.query;
+    let status = 'danger';
+    const flashes = req.flash();
+    message = flashes.error || flashes.message;
+
+    if (flashes.success) {
+        message = flashes.success;
+        status = 'success';
+    }
+
+    return res.render('signin', {
+        status,
+        message,
+        loggedIn: false
     });
 }
 
@@ -20,15 +42,25 @@ export const signup = async (req, res, next) => {
         await authService.checkRegistrationData(username, email, password, repeatedPassword);
         const user = await authService.createUser(username, email, password);
 
-        res.redirect(`/signin?message=${user.username}, you have been registered succesfully`);
+        req.flash('success', `${user.username}, you have been registered succesfully`)
+        return res.redirect('/signin');
     } catch (err) {
-        res.render('signup', {
+        return res.render('signup', {
             message: err.message.split(',')
         })
     }
 
 }
 
-export const signin = (req, res, next) => {
-    res.render('signin');
-}
+export const signin = passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/signin',
+    failureFlash: true,
+})
+
+export const logout = (req, res, next) => {
+    req.logout(function (err) {
+        if (err) { return next(err); }
+        res.redirect('/signin');
+    });
+};
