@@ -1,32 +1,147 @@
-import redisClient from '../services/redis.js';
-import { DEFAULT_EXPIRATION } from '../services/redis.js';
+import redisClient, { DEFAULT_EXPIRATION } from '../services/redis.js';
+import models from '../models/sequelize.js';
+import { STATUS } from '../models/task.js';
 
-export const getTasks = async (req, res, next) => {
-    const todoId = req.query.todoId;
+const { Task, User } = models;
 
-    redisClient.get('todos', async (error, todos) => {
-        if (error) console.log('Err: ', error);
+export const listTasks = async (req, res, next) => {
+    try {
 
-        if (todos != null) {
-            // return res.json(JSON.parse(todos));
-            return res.render('tasks', {
-                tasks: todos,
+        const users = JSON.parse(await redisClient.get("users"));
+        const tasks = JSON.parse(await redisClient.get("tasks"));
+
+        let toDo = [];
+        let inProgress = [];
+        let done = [];
+        if (tasks && tasks.length) {
+            toDo = tasks.filter(task => task.status === STATUS.TO_DO);
+            inProgress = tasks.filter(task => task.status === STATUS.IN_PROGRESS);
+            done = tasks.filter(task => task.status === STATUS.DONE);
+        }
+
+        const error = req.flash('error');
+        const message = req.flash('message');
+
+        return res.render('tasks', {
+            error,
+            message,
+            toDo,
+            inProgress,
+            done,
+            tasks: toDo.concat(inProgress),
+            users,
+            loggedIn: true
+        })
+
+    } catch (err) {
+        console.log('Err: ', err)
+        return res.render('tasks', {
+            error: err.message,
+            loggedIn: true
+        })
+    }
+
+
+}
+
+export const getTaskById = async (req, res, next) => {
+    try {
+        const { taskId } = req.param;
+
+        redisClient.get(`tasks:${taskId}`, (error, task) => {
+            if (error) {
+                console.log('Err: ', error);
+                req.flash('error', err.message);
+                return res.redirect('/');
+            }
+
+            if (JSON.parse(task) instanceof Task) {
+                return res.redner('taskDetails', {
+                    task: JSON.parse(task),
+                    loggedIn: true
+                })
+            }
+        }
+        )
+
+        const task = await Task.findByPk(taskId);
+        if (!(task instanceof Task))
+
+            return res.render('taskDetails', {
+                task,
                 loggedIn: true
             })
-        }
-        const url = new URL('https://jsonplaceholder.typicode.com/todos');
-        const params = new URLSearchParams();
-        if (todoId) {
-            params.append('id', todoId);
-        }
-        const data = await fetch(url + '?' + params,
+
+    } catch (err) {
+        console.log('Err: ', err)
+        req.flash('error', err.message);
+        return res.redirect('/');
+    }
+}
+
+
+export const addNewTask = async (req, res, next) => {
+    console.log('body', req.body);
+    try {
+        const { title, description, mainTask, doer } = req.body;
+
+        const task = await Task.create({
+            title,
+            description,
+            status: STATUS.TO_DO,
+            subTask: !!mainTask,
+            mainTaskId: mainTask,
+            ownerId: req.user.id,
+            doerId: doer
+        })
+
+        await redisClient.del('tasks');
+
+        req.flash('message', `Task ${task.title} created succesfully`);
+        return res.redirect('/');
+    } catch (err) {
+        console.log('Err: ', err);
+        req.flash('error', err.message)
+        return res.redirect('/');
+    }
+}
+
+export const updateTask = async (req, res, next) => {
+
+    try {
+        const { taskId } = req.param;
+
+        const task = await Task.update({ ...req.body },
             {
-                method: 'GET'
+                where: { id: taskId }
             })
-            .then(response => response.json());
 
-        redisClient.setEx('todos', DEFAULT_EXPIRATION, JSON.stringify(data));
+        await redisClient.set(`tasks:${taskId}`, JSON.stringify(task), { EX: DEFAULT_EXPIRATION });
+        await redisClient.del('tasks');
 
-        res.json(data);
-    })
+        req.flash('success', `Task ${taskId} updated successfully`);
+        return res.redirect('/');
+
+    } catch (err) {
+        console.log('Err: ', err)
+        req.flash('error', err.message);
+        return res.redirect('/');
+    }
+}
+
+
+export const deleteTask = async (req, res, next) => {
+    try {
+        const taskId = req.param;
+        await Task.findByPk(taskId)
+            .then(task => task.destroy());
+
+        await redisClient.del('tasks');
+
+        req.flash('success', `Task ${taskId} deleted successfully`)
+    } catch (err) {
+        console.log('Err: ', err)
+        req.flash('error', err.message);
+        return res.redirect('/');
+    }
 }

@@ -7,12 +7,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tasks manager</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/quartz/bootstrap.min.css">
+    <style>
+        #tasks-table tr {
+            display: block;
+            float: left;
+            min-width: 33.3%;
+        }
+
+        #tasks-table th {
+            text-align: center;
+        }
+
+        #tasks-table th,
+        #tasks-table td {
+            display: block;
+        }
+
+        #tasks-table .badge span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3.5rem;
+            height: 2rem;
+            padding-bottom: 3px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center
+        }
+
+        #tasks-table .tag-item {
+            font-size: .75rem;
+            display: inline-block;
+            position: absolute;
+            height: 1.5rem;
+            top: auto;
+            right: 0;
+            background: rgba(83, 83, 83, 0.2);
+            border-radius: 3px;
+            padding: 2.5px 10px;
+        }
+    </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Tasks manager</a>
+            <a class="navbar-brand me-4" href="#">Tasks manager</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,11 +61,14 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     {{#if loggedIn }}
-                    <li class="nav-item">
+                    <li class="nav-item me-1">
                         <a class="nav-link active" aria-current="page" href="/">Tasks</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/new">Create new</a>
+                        <a class="nav-link text-primary fw-bold" style="cursor: pointer;" data-bs-toggle="modal"
+                            data-bs-target="#newTaskModal">
+                            Add new
+                        </a>
                     </li>
                 </ul>
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
@@ -51,10 +95,10 @@
     </nav>
     <div class="container">
         {{{body}}}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
 </body>
 
 </html>

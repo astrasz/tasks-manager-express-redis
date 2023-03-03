@@ -1,7 +1,7 @@
 import express from 'express';
 import { engine } from 'express-handlebars'
 import bodyParser from 'body-parser';
-// import cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import flash from 'connect-flash';
 
@@ -11,6 +11,7 @@ import errorHandler from './middlewares/errorHandler.js';
 import passport from 'passport';
 import setPassport from './middlewares/passport.js';
 import authService from './services/auth.js'
+import * as helpers from './views/helpers/hbs-helpers.js'
 
 
 
@@ -25,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 setPassport(passport, authService.verifyPassword, models.User);
 
 
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(session({
     secret: 'secret',
     resave: false,
@@ -39,7 +40,7 @@ app.use(passport.session());
 
 
 // view engine
-app.engine('handlebars', engine({ defaultLayout: 'main' }));
+app.engine('handlebars', engine({ defaultLayout: 'main', helpers: helpers }));
 app.set('view engine', 'handlebars');
 app.set('views', './src/views');
 
@@ -47,9 +48,10 @@ app.set('views', './src/views');
 // routes
 app.use(routes);
 
+// errors
 app.use(errorHandler);
 
-sequelize.sync({ alter: true })
+sequelize.sync()
     .then(() => {
         console.log('Database connection has been established');
         console.log('models', sequelize.models);

@@ -7,24 +7,11 @@
         </div>
         {{/if}}
 
-        {{!-- {{#if messages}}
-        {{#each messages}}
-        <div class="alert" role="alert">
-            {{this.error}}
-        </div>
-        {{/each}}
-        {{/if}} --}}
-
         <form method="POST" action="/signin">
             <div class="form-group mb-1">
                 <label for="usernameInput">Username</label>
                 <input name="username" type="text" class="form-control" id="usernameInput" placeholder="Username">
             </div>
-            {{!--
-            <div class="form-group mb-1">
-                <label for="emailInput">Email address</label>
-                <input name="email" type="email" class="form-control" id="emailInput" placeholder="Email">
-            </div> --}}
 
             <div class="form-group mb-1">
                 <label for="passwordInput">Password</label>

@@ -1,11 +1,11 @@
-class CustomError extends Error {
+class AppError extends Error {
     constructor(message, statusCode = null) {
         super(message);
-        this.name = 'CustomError';
+        this.name = 'AppError';
         if (statusCode) {
             this.statusCode = statusCode;
         }
     }
 }
 
-export default CustomError;
+export default AppError;

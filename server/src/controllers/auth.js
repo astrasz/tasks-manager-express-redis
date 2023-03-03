@@ -1,5 +1,6 @@
 import authService from '../services/auth.js'
 import passport from 'passport';
+import redisClient from '../services/redis.js';
 
 export const showSignupForm = (req, res, next) => {
 
@@ -58,7 +59,10 @@ export const signin = passport.authenticate('local', {
     failureFlash: true,
 })
 
-export const logout = (req, res, next) => {
+export const logout = async (req, res, next) => {
+
+    await redisClient.flushAll()
+
     req.logout(function (err) {
         if (err) { return next(err); }
         res.redirect('/signin');

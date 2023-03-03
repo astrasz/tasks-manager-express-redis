@@ -1,4 +1,4 @@
-import redis from 'redis';
+import { createClient } from 'redis';
 
 export const DEFAULT_EXPIRATION = 3600;
 
@@ -12,8 +12,8 @@ class RedisService {
             return this._instance;
         }
 
-        this._instance = redis.createClient({
-            legacyMode: true,
+        this._instance = createClient({
+            // legacyMode: true,
             socket: {
                 host: 'redis',
                 port: 6379
