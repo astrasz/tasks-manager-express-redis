@@ -1,6 +1,7 @@
 import redisClient, { DEFAULT_EXPIRATION } from '../services/redis.js';
 import models from '../models/sequelize.js';
 import { STATUS } from '../models/task.js';
+import { trimText } from '../utils/string-formatter.js';
 
 const { Task, User } = models;
 
@@ -14,9 +15,24 @@ export const listTasks = async (req, res, next) => {
         let inProgress = [];
         let done = [];
         if (tasks && tasks.length) {
-            toDo = tasks.filter(task => task.status === STATUS.TO_DO).map(task => ({ ...task, color: 'primary' }));
-            inProgress = tasks.filter(task => task.status === STATUS.IN_PROGRESS).map(task => ({ ...task, color: 'warning' }));
-            done = tasks.filter(task => task.status === STATUS.DONE).map(task => ({ ...task, color: 'danger' }));
+            toDo = tasks.filter(task => task.status === STATUS.TO_DO).map(task => (
+                {
+                    ...task,
+                    color: 'primary',
+                    shortDesc: trimText(task.description, 20)
+                }));
+            inProgress = tasks.filter(task => task.status === STATUS.IN_PROGRESS).map(task => (
+                {
+                    ...task,
+                    color: 'warning',
+                    shortDesc: trimText(task.description, 20)
+                }));
+            done = tasks.filter(task => task.status === STATUS.DONE).map(task => (
+                {
+                    ...task,
+                    color: 'success',
+                    shortDesc: trimText(task.description, 20)
+                }));
         }
 
         const error = req.flash('error');
