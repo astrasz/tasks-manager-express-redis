@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tasks manager</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/quartz/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <style>
         #tasks-table tr {
             display: block;
@@ -46,6 +47,106 @@
             background: rgba(83, 83, 83, 0.2);
             border-radius: 3px;
             padding: 2.5px 10px;
+        }
+
+        #task-details.card {
+            border: 0;
+            box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+            -webkit-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+            -moz-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+            -ms-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+        }
+
+        #task-details .card-header {
+            display: inline;
+        }
+
+        #task-details .card-title {
+            padding: 1rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+
+        .task-details .task-details-title-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .task-details .task-details-title-wrapper .task-details-date-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background-color: #edf1fc;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+        }
+
+        .task-details .task-details-title-wrapper .task-details-date-primary .task-details-date-day {
+            color: #4e73e5;
+            font-weight: 500;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .task-details .task-details-title-wrapper .task-details-date-primary .task-details-date-month {
+            color: #4e73e5;
+            line-height: 1;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        .task-details .task-details-title-wrapper .task-details-date-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background-color: #fcfcfd;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+        }
+
+        .task-details .task-details-title-wrapper .task-details-title {
+            display: flex;
+            flex-direction: column;
+            margin-left: 1rem;
+        }
+
+        .task-details .task-details-title-wrapper .task-details-title .task-details-pro-title {
+            color: #3c4142;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .task-details .task-details-title-wrapper .task-details-title .task-details-status {
+            color: rgba(83, 83, 83, 0.8);
+            font-size: 13px;
+        }
+
+        .task-details .task-details-title-wrapper .task-details-creator {
+            display: flex;
+            flex-direction: column;
+            margin-left: 1rem;
+            flex: 1;
+            text-align: end;
+        }
+
+        .task-details .task-details-description {
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: .5px;
+            margin-top: 2rem;
+            color: #000;
+
+        }
+
+        div.action-icons {
+            display: flex;
+            justify-content: end;
         }
     </style>
 </head>

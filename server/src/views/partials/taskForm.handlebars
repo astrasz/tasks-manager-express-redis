@@ -1,0 +1,40 @@
+<form novalidate autocomplete="false" action="/new" method="post">
+    <div class="modal-body">
+        <div class="md-form mb-2">
+            <input type="text" id="title" class="form-control" name="title">
+            <label for="title">Task title</label>
+        </div>
+        <div class="md-form mb-2">
+            <select class="form-select" aria-label="Default select example" id="mainTask" name="subTask">
+                <option selected></option>
+                {{#each tasks}}
+                <option value={{tasks.id}}>{{tasks.title}}</option>
+                {{/each}}
+            </select>
+            <label for="mainTask">Main task</label>
+        </div>
+        <div class="md-form mb-2">
+            <select class="form-select" aria-label="Default select example" id="doer" name="doer">
+                <option selected></option>
+                {{#each users}}
+                <option value={{this.id}}>{{this.username}}</option>
+                {{/each}}
+            </select>
+            <label for=" doer">Assign to</label>
+        </div>
+        <div class="md-form mb-2">
+            <input type="text" id="status" value="TO DO" class="form-control validate" disabled name="status">
+            <label for="status">Status</label>
+        </div>
+
+        <div class="md-form">
+            <textarea type="text" id="description" class="md-textarea form-control" rows="2"
+                name="description"></textarea>
+            <label for="description">Description</label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>

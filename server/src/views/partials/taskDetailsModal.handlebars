@@ -1,0 +1,60 @@
+<div class="modal fade" id="taskDetailsModal-{{this.id}}" tabindex="-1" aria-labelledby="taskDetailsModalLabel"
+    aria-hidden="true" style="overflow-y:scroll;">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div id="task-details" class="card card-margin">
+                <div class="card-header no-border">
+                    <div class="action-icons">
+                        <button class="bi bi-trash bg-dark text-{{this.color}}" style="border:
+                                    none; border-radius: 5px; padding: 5px 12px; margin-right: 5px"></button>
+                        <button class="bi bi-pencil bg-dark text-{{this.color}}" style="border:
+                                    none; border-radius: 5px; padding: 5px 10px;"></button>
+                    </div>
+
+                    <h6 class=" card-title text-monospace" style="font-family:monospace;">
+                        <span>Making by</span>
+                        <span class="text-{{this.color}} bg-dark px-2 py-1 ms-1"
+                            style="border-radius: 10px;">{{this.Doer.username}}</span>
+                    </h6>
+                </div>
+                <div class="card-body pt-2">
+                    <div class="task-details">
+                        <div class="task-details-title-wrapper">
+                            <div class="task-details-date-{{this.color}}">
+                                <span class="task-details-date-day">{{ getDayFromDate
+                                    this.createdAt}}</span>
+                                <span class="task-details-date-month">{{ getMonthFromDate
+                                    this.createdAt}}</span>
+                            </div>
+                            <div class="task-details-title">
+                                <span class="task-details-pro-title">{{this.title}}</span>
+                                <span class="task-details-status text-monospace" style="font-family:monospace;">value:
+                                    {{this.value}}
+                                </span>
+                                <span class="task-details-status text-monospace" style="font-family:monospace;">status:
+                                    <span class="text-{{this.color}} fw-bold bg-dark px-1"
+                                        style="border-radius: 4px;">{{this.status}}</span>
+                                </span>
+
+                            </div>
+                            <div class="task-details-creator text-monospace" style="font-family:monospace;">
+                                <small class="text-muted">created by </small>
+                                <small class="text-muted">{{this.Owner.username}}</small>
+                            </div>
+                        </div>
+                        <div class="task-details-description">
+                            {{this.description}}
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>

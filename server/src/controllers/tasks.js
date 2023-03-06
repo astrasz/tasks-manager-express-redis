@@ -14,9 +14,9 @@ export const listTasks = async (req, res, next) => {
         let inProgress = [];
         let done = [];
         if (tasks && tasks.length) {
-            toDo = tasks.filter(task => task.status === STATUS.TO_DO);
-            inProgress = tasks.filter(task => task.status === STATUS.IN_PROGRESS);
-            done = tasks.filter(task => task.status === STATUS.DONE);
+            toDo = tasks.filter(task => task.status === STATUS.TO_DO).map(task => ({ ...task, color: 'primary' }));
+            inProgress = tasks.filter(task => task.status === STATUS.IN_PROGRESS).map(task => ({ ...task, color: 'warning' }));
+            done = tasks.filter(task => task.status === STATUS.DONE).map(task => ({ ...task, color: 'danger' }));
         }
 
         const error = req.flash('error');
@@ -81,7 +81,6 @@ export const getTaskById = async (req, res, next) => {
 
 
 export const addNewTask = async (req, res, next) => {
-    console.log('body', req.body);
     try {
         const { title, description, mainTask, doer } = req.body;
 

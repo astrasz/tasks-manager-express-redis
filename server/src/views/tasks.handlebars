@@ -1,70 +1,30 @@
-{{#if error}}
-<div class="alert alert-danger mt-5" role="alert">
-    {{#each error}}
-    <li>{{this}}</li>
-    {{/each}}
-</div>
-{{/if}}
-
-{{#if message}}
-<div class="alert alert-success mt-5" role="alert">
-    {{#each message}}
-    <li>{{this}}</li>
-    {{/each}}
-</div>
-{{/if}}
-
 <div class="row justify-content-center mt-5">
-    <table id="tasks-table" class="table mt-3">
+    {{#if error}}
+    <div class="alert alert-danger mt-1" role="alert">
+        {{#each error}}
+        <li>{{this}}</li>
+        {{/each}}
+    </div>
+    {{/if}}
+    {{#if message}}
+    <div class="alert alert-success mt-1" role="alert">
+        {{#each message}}
+        <li>{{this}}</li>
+        {{/each}}
+    </div>
+    {{/if}}
+    <table id="tasks-table" class="table mt-2">
         <tbody>
             <tr>
                 <th>TO DO</th>
                 {{#if toDo.length}}
                 {{#each toDo}}
                 <td>
-                    <div id="modal-button-details" class="card mx-auto" style="width: 18rem;">
-                        <div class="card-header">
-                            <div class="badge"> <span
-                                    class="text-primary bg-dark fw-bold h5">{{this.Owner.username}}</span>
-                            </div>
-                            <div class="tag-item"><i class="fas fa-clock mr-2"></i>
-                                <p class="p">{{{dateFormat this.createdAt}}}</p>
-                            </div>
-                        </div>
-
-                        <div class="card-body" style="cursor: pointer;" data-bs-toggle="modal"
-                            data-bs-target="#taskDetailsModal-{{this.id}}">
-                            <h6 class="card-title mb-2">{{this.title}}</h6>
-                            <p class="card-text">{{this.description}}</p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
-                    </div>
+                    {{> taskCard }}
                 </td>
 
-                <!--taskDetailsModal -->
+                {{> taskDetailsModal }}
 
-                <div class="modal fade" id="taskDetailsModal-{{this.id}}" tabindex="-1"
-                    aria-labelledby="taskDetailsModalLabel" aria-hidden="true" style="overflow-y:scroll;">
-
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="taskDetailsModalLabel">Task {{this.title}} details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <p>{{this.description}}</p>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Edit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--taskDetailsModal -->
                 {{/each}}
                 {{/if}}
             </tr>
@@ -73,48 +33,11 @@
                 {{#if inProgress.length}}
                 {{#each inProgress}}
                 <td>
-                    <div class="card mx-auto" style="width: 18rem;">
-                        <div class="card-header">
-                            <div class="badge"> <span
-                                    class="text-warning bg-dark fw-bold h5">{{this.Owner.username}}</span>
-                            </div>
-                            <div class="tag-item"><i class="fas fa-clock mr-2"></i>
-                                <p class="p">{{{dateFormat this.createdAt}}}</p>
-                            </div>
-                        </div>
-                        <div class="card-body" style="cursor: pointer;" data-bs-toggle="modal"
-                            data-bs-target="#taskDetailsModal-{{this.id}}">
-                            <h6 class="card-title mb-2">{{this.title}}</h6>
-                            <p class="card-text">{{this.description}}</p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
-                    </div>
+                    {{> taskCard }}
                 </td>
 
-                <!--taskDetailsModal -->
+                {{> taskDetailsModal }}
 
-                <div class="modal fade" id="taskDetailsModal-{{this.id}}" tabindex="-1"
-                    aria-labelledby="taskDetailsModalLabel" aria-hidden="true" style="overflow-y:scroll;">
-
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="taskDetailsModalLabel">Task {{this.title}} details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <p>{{this.description}}</p>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Edit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--taskDetailsModal -->
                 {{/each}}
                 {{/if}}
             </tr>
@@ -123,55 +46,16 @@
                 {{#if done.length}}
                 {{#each done}}
                 <td>
-                    <div class="card mx-auto" style="width: 18rem;">
-                        <div class="card-header">
-                            <div class="badge"> <span
-                                    class="text-success bg-dark fw-bold h5">{{this.Owner.username}}</span>
-                            </div>
-                            <div class="tag-item"><i class="fas fa-clock mr-2"></i>
-                                <p class="p">{{{dateFormat this.createdAt}}}</p>
-                            </div>
-                        </div>
-                        <div class="card-body" style="cursor: pointer;" data-bs-toggle="modal"
-                            data-bs-target="#taskDetailsModal-{{this.id}}">
-                            <h6 class="card-title mb-2">{{this.title}}</h6>
-                            <p class="card-text">{{this.description}}</p>
-                            <a href="#" class="card-link">Card link</a>
-                            <a href="#" class="card-link">Another link</a>
-                        </div>
-                    </div>
+                    {{> taskCard }}
                 </td>
 
-                <!--taskDetailsModal -->
+                {{> taskDetailsModal }}
 
-                <div class="modal fade" id="taskDetailsModal-{{this.id}}" tabindex="-1"
-                    aria-labelledby="taskDetailsModalLabel" aria-hidden="true" style="overflow-y:scroll;">
-
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="taskDetailsModalLabel">Task {{this.title}} details</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <p>{{this.description}}</p>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Edit</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--taskDetailsModal -->
                 {{/each}}
                 {{/if}}
             </tr>
         </tbody>
     </table>
-
-
 
     <!-- newTaskModal -->
     <div class="modal fade" id="newTaskModal" tabindex="-1" aria-labelledby="newTaskModalLabel" aria-hidden="true"
@@ -183,49 +67,9 @@
                     <h5 class="modal-title" id="newTaskModalLabel">Add new task</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form novalidate autocomplete="false" action="/new" method="post">
-                    <div class="modal-body">
-                        <div class="md-form mb-2">
-                            <input type="text" id="title" class="form-control" name="title">
-                            <label for="title">Task title</label>
-                        </div>
-                        <div class="md-form mb-2">
-                            <select class="form-select" aria-label="Default select example" id="mainTask"
-                                name="subTask">
-                                <option selected></option>
-                                {{#each tasks}}
-                                <option value={{tasks.id}}>{{tasks.title}}</option>
-                                {{/each}}
-                            </select>
-                            <label for="mainTask">Main task</label>
-                        </div>
-                        <div class="md-form mb-2">
-                            <select class="form-select" aria-label="Default select example" id="doer" name="doer">
-                                <option selected></option>
-                                {{#each users}}
-                                <option value={{this.id}}>{{this.username}}</option>
-                                {{/each}}
-                            </select>
-                            <label for=" doer">Assign to</label>
-                        </div>
-                        <div class="md-form mb-2">
-                            <input type="text" id="status" value="TO DO" class="form-control validate" disabled
-                                name="status">
-                            <label for="status">Status</label>
-                        </div>
 
-                        <div class="md-form">
-                            <textarea type="text" id="description" class="md-textarea form-control" rows="2"
-                                name="description"></textarea>
-                            <label for="description">Description</label>
-                        </div>
+                {{> taskForm }}
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>

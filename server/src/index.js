@@ -4,6 +4,9 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import flash from 'connect-flash';
+import * as url from 'url';
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 import models, { sequelize } from './models/sequelize.js';
 import routes from './routes/routes.js'
@@ -40,7 +43,11 @@ app.use(passport.session());
 
 
 // view engine
-app.engine('handlebars', engine({ defaultLayout: 'main', helpers: helpers }));
+app.engine('handlebars', engine({
+    defaultLayout: 'main',
+    helpers: helpers,
+    partialsDir: __dirname + '/views/partials'
+}));
 app.set('view engine', 'handlebars');
 app.set('views', './src/views');
 

@@ -7,8 +7,6 @@ const { User, Task } = models;
 const cacheTasks = async () => {
 
     let tasks = await redisClient.get('tasks');
-    console.log('task from cache', tasks);
-
     if (!(tasks && tasks.length)) {
 
         tasks = await Task.findAll({
@@ -27,7 +25,6 @@ const cacheUsers = async () => {
     let users = await redisClient.get('users');
 
     if (!(users && !users.length)) {
-        console.log('i tu');
         const users = await User.findAll({
             attributes: ['id', 'username', 'email']
         })
@@ -71,7 +68,6 @@ export const cacheData = async (req, res, next) => {
         await cacheTasks();
         next();
     } catch (err) {
-        console.log('Err from cache: ', err);
         next(err)
     }
 

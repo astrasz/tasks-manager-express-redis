@@ -1,0 +1,17 @@
+<div id="modal-button-details" class="card mx-auto" style="width: 18rem;">
+    <div class="card-header">
+        <div class="badge"> <span class="text-{{this.color}} bg-dark fw-bold h5">{{this.Owner.username}}</span>
+        </div>
+        <div class="tag-item"><i class="fas fa-clock mr-2"></i>
+            <p class="p">{{{dateFormat this.createdAt}}}</p>
+        </div>
+    </div>
+
+    <div class="card-body" style="cursor: pointer;" data-bs-toggle="modal"
+        data-bs-target="#taskDetailsModal-{{this.id}}">
+        <h6 class="card-title mb-2">{{this.title}}</h6>
+        <p class="card-text">{{this.description}}</p>
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+    </div>
+</div>

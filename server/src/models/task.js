@@ -27,7 +27,13 @@ const getTaskModel = (sequelize, DataTypes) => {
             type: DataTypes.ENUM([STATUS.TO_DO, STATUS.IN_PROGRESS, STATUS.DONE]),
             default: STATUS.TO_DO,
             // allowNull: false
+        },
+        value: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
         }
+
     }, {
         logging: true
     }
