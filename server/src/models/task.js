@@ -19,7 +19,7 @@ const getTaskModel = (sequelize, DataTypes) => {
             allowNull: false,
         },
         description: DataTypes.STRING,
-        subTask: {
+        isAssociated: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
@@ -49,8 +49,8 @@ const getTaskModel = (sequelize, DataTypes) => {
             foreignKey: 'doerId'
         })
         Task.belongsTo(models.Task, {
-            as: 'MainTask',
-            foreignKey: 'mainTaskId'
+            as: 'Associated',
+            foreignKey: 'associatedId'
         })
     }
 

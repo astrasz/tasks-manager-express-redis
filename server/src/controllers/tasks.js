@@ -19,19 +19,28 @@ export const listTasks = async (req, res, next) => {
                 {
                     ...task,
                     color: 'primary',
-                    shortDesc: trimText(task.description, 20)
+                    shortDesc: trimText(task.description, 20),
+                    users: users,
+                    statuses: { ...STATUS },
+                    tasks: toDo.concat(inProgress),
                 }));
             inProgress = tasks.filter(task => task.status === STATUS.IN_PROGRESS).map(task => (
                 {
                     ...task,
                     color: 'warning',
-                    shortDesc: trimText(task.description, 20)
+                    shortDesc: trimText(task.description, 20),
+                    users: users,
+                    statuses: { ...STATUS },
+                    tasks: toDo.concat(inProgress),
                 }));
             done = tasks.filter(task => task.status === STATUS.DONE).map(task => (
                 {
                     ...task,
                     color: 'success',
-                    shortDesc: trimText(task.description, 20)
+                    shortDesc: trimText(task.description, 20),
+                    users: users,
+                    statuses: { ...STATUS },
+                    tasks: toDo.concat(inProgress),
                 }));
         }
 
@@ -98,14 +107,14 @@ export const getTaskById = async (req, res, next) => {
 
 export const addNewTask = async (req, res, next) => {
     try {
-        const { title, description, mainTask, doer } = req.body;
+        const { title, description, associated, doer } = req.body;
 
         const task = await Task.create({
             title,
             description,
             status: STATUS.TO_DO,
-            subTask: !!mainTask,
-            mainTaskId: mainTask,
+            isAssociated: !!associated,
+            associatedId: associated ? associated : null,
             ownerId: req.user.id,
             doerId: doer
         })
@@ -122,9 +131,8 @@ export const addNewTask = async (req, res, next) => {
 }
 
 export const updateTask = async (req, res, next) => {
-
     try {
-        const { taskId } = req.param;
+        const { taskId } = req.params;
 
         const task = await Task.update({ ...req.body },
             {
@@ -134,11 +142,11 @@ export const updateTask = async (req, res, next) => {
         await redisClient.set(`tasks:${taskId}`, JSON.stringify(task), { EX: DEFAULT_EXPIRATION });
         await redisClient.del('tasks');
 
-        req.flash('success', `Task ${taskId} updated successfully`);
+        req.flash('message', `Task ${taskId} updated successfully`);
         return res.redirect('/');
 
     } catch (err) {
-        console.log('Err: ', err)
+        console.log('Errrrrr: ', err)
         req.flash('error', err.message);
         return res.redirect('/');
     }

@@ -7,9 +7,10 @@ const router = express.Router();
 
 router.get('/', isAuthenticated, cacheData, tasksController.listTasks);
 router.post('/new', isAuthenticated, tasksController.addNewTask)
-router.get('/:taskId', isAuthenticated, cachTaskById, tasksController.getTaskById);
 router.put('/:taskId', isAuthenticated, tasksController.updateTask);
 router.delete('/:taskId', isAuthenticated, tasksController.deleteTask);
+router.get('/:taskId', isAuthenticated, cachTaskById, tasksController.getTaskById);
+
 
 
 export default router;

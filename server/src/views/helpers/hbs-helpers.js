@@ -1,7 +1,5 @@
 import { format, formatDistanceToNow } from 'date-fns';
 
-
-
 export const dateFormat = (date) => {
     const time = new Date(date);
     const newFormat = formatDistanceToNow(time, { addSuffix: true });
@@ -18,4 +16,8 @@ export const getMonthFromDate = (date) => {
     const time = new Date(date);
     const month = format(time, 'MMM');
     return month;
+}
+
+export const equal = (a, b) => {
+    return !!(a === b);
 }

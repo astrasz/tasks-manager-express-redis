@@ -1,35 +1,53 @@
-<form novalidate autocomplete="false" action="/new" method="post">
+<form novalidate autocomplete="false" {{#if id}} action="/{{id}}?_method=PUT" method="POST" {{else}} action="/new"
+    method="POST" {{/if}}>
     <div class="modal-body">
         <div class="md-form mb-2">
-            <input type="text" id="title" class="form-control" name="title">
+            <input onchange="(e) => setInputValue(e)" type="text" id="title" class="form-control" name="title" {{#if
+                title}} value="{{ title}}" {{/if}}>
             <label for="title">Task title</label>
         </div>
         <div class="md-form mb-2">
-            <select class="form-select" aria-label="Default select example" id="mainTask" name="subTask">
+            <select class="form-select" id="associated" name="associated">
                 <option selected></option>
                 {{#each tasks}}
-                <option value={{tasks.id}}>{{tasks.title}}</option>
+                <option value={{id}}>{{title}}</option>
                 {{/each}}
             </select>
-            <label for="mainTask">Main task</label>
+            <label for="associated">Associated</label>
         </div>
         <div class="md-form mb-2">
-            <select class="form-select" aria-label="Default select example" id="doer" name="doer">
-                <option selected></option>
+            <select class="form-select" id="doer" name="doer">
+                <option selected {{#if Owner.username}} value="{{Owner.id}}" {{/if}}>
+                    {{#if Owner.username}} {{Owner.username}} {{/if}}
+                </option>
                 {{#each users}}
-                <option value={{this.id}}>{{this.username}}</option>
+                <option value={{id}}>{{username}}</option>
                 {{/each}}
             </select>
-            <label for=" doer">Assign to</label>
+            <label for="doer">Assign to</label>
         </div>
         <div class="md-form mb-2">
+            {{#if status}}
+            <select class="form-select" id="status" name="status">
+                <option selected {{#if status}} value="{{status}}" {{/if}}>
+                    {{#if status}} {{status}} {{/if}}
+                </option>
+                {{#each statuses}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+            <label for=" status">Status</label>
+
+            {{else}}
             <input type="text" id="status" value="TO DO" class="form-control validate" disabled name="status">
             <label for="status">Status</label>
+            {{/if}}
+
         </div>
 
         <div class="md-form">
-            <textarea type="text" id="description" class="md-textarea form-control" rows="2"
-                name="description"></textarea>
+            <textarea type="text" id="description" class="md-textarea form-control" rows="2" name="description"> {{#if
+                description}} {{ description}} {{/if}}</textarea>
             <label for="description">Description</label>
         </div>
     </div>

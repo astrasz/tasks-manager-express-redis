@@ -5,7 +5,8 @@ const errorHandler = (err, req, res, next) => {
     return res.status(errStatus).json({
         success: false,
         status: errStatus,
-        message: errMessage
+        message: errMessage,
+        stack: err.stack
     });
 }
 

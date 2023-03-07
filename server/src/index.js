@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import flash from 'connect-flash';
+import methodOverride from 'method-override';
 import * as url from 'url';
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
@@ -20,6 +21,7 @@ import * as helpers from './views/helpers/hbs-helpers.js'
 
 const app = express();
 const port = 5000;
+
 
 //body parser
 app.use(bodyParser.json());
@@ -50,6 +52,9 @@ app.engine('handlebars', engine({
 }));
 app.set('view engine', 'handlebars');
 app.set('views', './src/views');
+
+// method-override
+app.use(methodOverride('_method'))
 
 
 // routes

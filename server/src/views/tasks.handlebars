@@ -14,16 +14,19 @@
     </div>
     {{/if}}
     <table id="tasks-table" class="table mt-2">
+
         <tbody>
+
             <tr>
                 <th>TO DO</th>
                 {{#if toDo.length}}
                 {{#each toDo}}
                 <td>
                     {{> taskCard }}
+                    {{> taskDetailsModal }}
                 </td>
 
-                {{> taskDetailsModal }}
+                {{> taskEditModal }}
 
                 {{/each}}
                 {{/if}}
@@ -34,9 +37,11 @@
                 {{#each inProgress}}
                 <td>
                     {{> taskCard }}
+                    {{> taskDetailsModal }}
+
                 </td>
 
-                {{> taskDetailsModal }}
+                {{> taskEditModal }}
 
                 {{/each}}
                 {{/if}}
@@ -47,9 +52,9 @@
                 {{#each done}}
                 <td>
                     {{> taskCard }}
+                    {{> taskDetailsModal }}
                 </td>
-
-                {{> taskDetailsModal }}
+                {{> taskEditModal }}
 
                 {{/each}}
                 {{/if}}
@@ -67,7 +72,6 @@
                     <h5 class="modal-title" id="newTaskModalLabel">Add new task</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
                 {{> taskForm }}
 
             </div>
@@ -75,25 +79,5 @@
     </div>
 </div>
 <!-- newTaskModal -->
-
-<!-- editTaskModal -->
-
-<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true"
-    style="overflow-y:scroll;">
-
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editTaskModalLabel">Edit task</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            {{> taskForm }}
-
-        </div>
-    </div>
-</div>
-
-<!-- editTaskModal -->
 
 </div>
