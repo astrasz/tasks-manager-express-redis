@@ -1,0 +1,19 @@
+<div class="modal fade" id="confirmationModal-{{id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Delete task '{{title}}'</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the task?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="/{{id}}?_method=DELETE" method="POST">
+                    <button type="submit" class="btn btn-danger btn-ok">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

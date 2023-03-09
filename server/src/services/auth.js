@@ -7,8 +7,10 @@ import bcrypt from 'bcryptjs'
 
 class AuthService {
 
+    saltRounds = 10;
+
     constructor() {
-        this.saltRounds = 10;
+        // this.saltRounds = 10;
     }
 
     async getHashedPass(pass) {

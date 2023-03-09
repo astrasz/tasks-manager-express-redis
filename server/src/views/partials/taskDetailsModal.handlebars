@@ -7,7 +7,9 @@
                 <div class="card-header no-border">
                     <div class="action-icons">
                         <button class="bi bi-trash bg-dark text-{{color}}" style="border:
-                                    none; border-radius: 5px; padding: 5px 12px; margin-right: 5px"></button>
+                                    none; border-radius: 5px; padding: 5px 12px; margin-right: 5px"
+                            data-bs-toggle="modal" data-bs-target="#confirmationModal-{{id}}"
+                            data-bs-dismiss="modal"></button>
                         <button class="bi bi-pencil bg-dark text-{{this.color}}" style="border:
                                     none; border-radius: 5px; padding: 5px 10px;" data-bs-toggle="modal"
                             data-bs-target="#editTaskModal-{{id}}" data-bs-dismiss="modal"></button>
