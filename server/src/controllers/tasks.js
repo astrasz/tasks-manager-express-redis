@@ -10,9 +10,14 @@ const { Task } = models;
 export const listTasks = async (req, res, next) => {
     try {
 
-        const users = JSON.parse(await redisClient.get("users"));
-        const tasks = JSON.parse(await redisClient.get("tasks"));
+        const { search } = req.query;
 
+        const users = JSON.parse(await redisClient.get("users"));
+        let tasks = JSON.parse(await redisClient.get("tasks"));
+
+        if (search) {
+            tasks = tasks.filter(task => task.title.includes(search) || task.description.includes(search));
+        }
         const { toDo, inProgress, done } = taskService.prepareTasksToReturn(tasks, users);
 
         const error = req.flash('error');
@@ -21,6 +26,7 @@ export const listTasks = async (req, res, next) => {
         return res.render('tasks', {
             error,
             message,
+            search,
             toDo,
             inProgress,
             done,
