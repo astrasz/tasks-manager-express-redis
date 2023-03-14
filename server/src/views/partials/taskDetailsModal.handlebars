@@ -6,13 +6,17 @@
             <div id="task-details" class="card card-margin">
                 <div class="card-header no-border">
                     <div class="action-icons">
+                        {{#if delete}}
                         <button class="bi bi-trash bg-dark text-{{color}}" style="border:
                                     none; border-radius: 5px; padding: 5px 12px; margin-right: 5px"
                             data-bs-toggle="modal" data-bs-target="#confirmationModal-{{id}}"
                             data-bs-dismiss="modal"></button>
+                        {{/if}}
+                        {{#if edit}}
                         <button class="bi bi-pencil bg-dark text-{{this.color}}" style="border:
                                     none; border-radius: 5px; padding: 5px 10px;" data-bs-toggle="modal"
                             data-bs-target="#editTaskModal-{{id}}" data-bs-dismiss="modal"></button>
+                        {{/if}}
                     </div>
 
                     <h6 class=" card-title text-monospace" style="font-family:monospace;">
@@ -49,6 +53,12 @@
                         <div class="task-details-description">
                             {{description}}
                         </div>
+                        {{#if Associated}}
+                        <div class="task-details-associated mt-3">
+                            <span>Associated with:</span>
+                            <span>{{Associated.title}}</span>
+                        </div>
+                        {{/if}}
                     </div>
                 </div>
                 <div class="modal-footer">

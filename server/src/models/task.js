@@ -18,7 +18,7 @@ const getTaskModel = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        description: DataTypes.STRING,
+        description: DataTypes.TEXT,
         isAssociated: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
@@ -33,7 +33,6 @@ const getTaskModel = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: 0
         }
-
     }, {
         logging: true
     }

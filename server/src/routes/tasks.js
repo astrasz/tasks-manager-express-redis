@@ -6,6 +6,7 @@ import { isAuthenticated } from '../middlewares/passport.js';
 const router = express.Router();
 
 router.get('/', isAuthenticated, cacheData, tasksController.listTasks);
+router.get('/error', isAuthenticated, tasksController.displayInvalidForm)
 router.post('/new', isAuthenticated, tasksController.addNewTask)
 router.put('/:taskId', isAuthenticated, tasksController.updateTask);
 router.delete('/:taskId', isAuthenticated, tasksController.deleteTask);

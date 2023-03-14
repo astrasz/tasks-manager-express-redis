@@ -28,9 +28,9 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 3.5rem;
+            min-width: 3.5rem;
+            padding: 0 5px 0 5px;
             height: 2rem;
-            padding-bottom: 3px;
             border-radius: 5px;
             display: flex;
             justify-content: center;
@@ -165,12 +165,14 @@
                     <li class="nav-item me-1">
                         <a class="nav-link active" aria-current="page" href="/">Tasks</a>
                     </li>
+                    {{#if (equal invalidTask undefined )}}
                     <li class="nav-item">
                         <a class="nav-link text-primary fw-bold" style="cursor: pointer;" data-bs-toggle="modal"
                             data-bs-target="#newTaskModal">
                             Add new
                         </a>
                     </li>
+                    {{/if}}
                 </ul>
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">

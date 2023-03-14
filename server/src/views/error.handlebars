@@ -1,0 +1,19 @@
+<div class="row justify-content-center align-items-center my-5">
+    <div class="col-4"></div>
+    <div class="col-4 mt-4">
+
+        {{#if error}}
+        <div class="alert alert-danger mt-1" role="alert">
+            {{#each error}}
+            <li>{{this}}</li>
+            {{/each}}
+        </div>
+        {{/if}}
+        <h5 class="mb-3">Add new task</h5>
+
+        {{> taskForm }}
+
+    </div>
+    <div class="col-4"></div>
+
+</div>

@@ -18,10 +18,8 @@ import authService from './services/auth.js'
 import * as helpers from './views/helpers/hbs-helpers.js'
 
 
-
 const app = express();
 const port = 5000;
-
 
 //body parser
 app.use(bodyParser.json());
@@ -29,7 +27,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // passport && session
 setPassport(passport, authService.verifyPassword, models.User);
-
 
 app.use(cookieParser());
 app.use(session({
@@ -56,7 +53,6 @@ app.set('views', './src/views');
 // method-override
 app.use(methodOverride('_method'))
 
-
 // routes
 app.use(routes);
 
@@ -66,7 +62,6 @@ app.use(errorHandler);
 sequelize.sync()
     .then(() => {
         console.log('Database connection has been established');
-        console.log('models', sequelize.models);
         const server = app.listen(port, () => console.log(`Server is running on port: ${port}`));
     })
     .catch((err) => console.log('Unable to connect to the database', err));

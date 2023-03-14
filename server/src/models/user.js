@@ -1,3 +1,9 @@
+export const ROLE = {
+    ADMIN: 'ROLE_ADMIN',
+    USER: 'ROLE_USER'
+}
+
+
 const getUserModel = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         id: {
@@ -22,6 +28,11 @@ const getUserModel = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true
+        },
+        role: {
+            type: DataTypes.ENUM([ROLE.ADMIN, ROLE.USER]),
+            allowNull: false,
+            defaultValue: ROLE.USER
         }
     }, {
         logging: true

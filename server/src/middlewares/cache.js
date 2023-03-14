@@ -12,7 +12,9 @@ const cacheTasks = async () => {
         tasks = await Task.findAll({
             include: [
                 { model: User, as: 'Owner', attributes: ['id', 'username', 'email'] },
-                { model: User, as: 'Doer', attributes: ['id', 'username', 'email'] }]
+                { model: User, as: 'Doer', attributes: ['id', 'username', 'email'] },
+                { model: Task, as: 'Associated', attributes: ['id', 'title'] }
+            ]
         })
             .catch((err) => { throw err });
 
@@ -47,7 +49,7 @@ export const cachTaskById = async (req, res, next) => {
             if (!taskId) {
                 throw new AppError('Task id cannot be null', 400);
             }
-            const cacheKey = `task:${task.id}`;
+            const cacheKey = `tasks:${task.id}`;
 
             if (await redisClient.exists(cacheKey)) {
                 next();
