@@ -2,9 +2,19 @@ import redisClient, { DEFAULT_EXPIRATION } from '../services/redis.js';
 import models from '../models/sequelize.js';
 import { STATUS } from '../models/task.js';
 import taskService from '../services/task.js';
+import { ROLE } from '../models/user.js';
 
 
 const { Task } = models;
+
+export const listUnprocessedTasks = (req, res, next) => {
+    return res.render('backboard', {
+        loggedIn: true,
+        admin: req.user.role === ROLE.ADMIN
+    })
+}
+
+
 
 export const listTasks = async (req, res, next) => {
     try {
@@ -32,6 +42,7 @@ export const listTasks = async (req, res, next) => {
             tasks: toDo.concat(inProgress),
             users,
             loggedIn: true,
+            admin: req.user.role === ROLE.ADMIN
         })
 
     } catch (err) {
@@ -57,7 +68,8 @@ export const displayInvalidForm = async (req, res, next) => {
             error,
             users,
             tasks: tasks.filter(task => task.status !== STATUS.DONE),
-            loggedIn: true
+            loggedIn: true,
+            admin: req.user.role === ROLE.ADMIN
         })
     }
     return res.redirect('/');
