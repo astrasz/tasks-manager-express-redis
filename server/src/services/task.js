@@ -1,4 +1,4 @@
-import { STATUS } from '../models/task.js';
+import { STATE, STATUS } from '../models/task.js';
 import { trimText } from '../utils/string-formatter.js';
 import models from '../models/sequelize.js';
 import * as tasksPermissions from '../permissions/task.js';
@@ -7,6 +7,7 @@ import redisClient, { DEFAULT_EXPIRATION } from '../services/redis.js';
 
 class TaskService {
 
+    taskState = STATE;
     taskStatus = STATUS;
     expiration = DEFAULT_EXPIRATION;
 
@@ -35,12 +36,18 @@ class TaskService {
         return { toDo, inProgress, done }
     }
 
-    createTaskDetails(task, currentUser, users, color, tasks) {
+    prepareUnprocessedToReturn(tasks, users, currentUser) {
+        return !!tasks && !!tasks.length && tasks.map(task => {
+            return this.createTaskDetails(task, currentUser, users);
+        })
+    }
+
+    createTaskDetails(task, currentUser, users, color, tasks = null) {
         return {
             ...task,
             color,
             users,
-            tasks: tasks.filter(task => task.status !== STATUS.DONE),
+            tasks: !!tasks && tasks.filter(task => task.status !== STATUS.DONE),
             edit: this.permissions.canEdit(currentUser, task),
             delete: this.permissions.canDelete(currentUser, task),
             shortDesc: this.trimText(task.description, 20),
@@ -112,6 +119,7 @@ class TaskService {
         }
 
         await this.client.del('tasks');
+        await this.client.del('unprocessed');
     }
 
     async update(body, id, currentUser) {
@@ -132,9 +140,28 @@ class TaskService {
 
         await task.update({
             ...body,
+            isProcessed: !!body.isProcessed ? true : false,
             associatedId: !!body.associatedId ? body.associatedId : null,
             isAssociated: !!body.associatedId,
         });
+        await this.updateCache(task);
+
+        return task;
+    }
+
+
+    async changeState(id) {
+        let task = await this.tasksModel.findByPk(id);
+
+        if (!(task instanceof this.tasksModel)) {
+            throw new AppError("Task cannot be found.", 400);
+        }
+
+        await task.update({
+            isProcessed: !task.isProcessed
+        })
+
+        task = await task.reload();
         await this.updateCache(task);
 
         return task;

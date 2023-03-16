@@ -5,6 +5,11 @@ export const STATUS = {
     DONE: 'DONE'
 }
 
+export const STATE = {
+    PROCESSED: 'PROCESSED',
+    UNPROCESSED: 'UNPROCESSED'
+}
+
 
 const getTaskModel = (sequelize, DataTypes) => {
     const Task = sequelize.define('Task', {
@@ -25,8 +30,13 @@ const getTaskModel = (sequelize, DataTypes) => {
         },
         status: {
             type: DataTypes.ENUM([STATUS.TO_DO, STATUS.IN_PROGRESS, STATUS.DONE]),
-            default: STATUS.TO_DO,
-            // allowNull: false
+            defaultValue: STATUS.TO_DO,
+            allowNull: false
+        },
+        isProcessed: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+            allowNull: false
         },
         value: {
             type: DataTypes.INTEGER,
@@ -34,7 +44,8 @@ const getTaskModel = (sequelize, DataTypes) => {
             defaultValue: 0
         }
     }, {
-        logging: true
+        logging: true,
+        paranoid: true
     }
     )
 

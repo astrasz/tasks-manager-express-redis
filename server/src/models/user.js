@@ -35,7 +35,8 @@ const getUserModel = (sequelize, DataTypes) => {
             defaultValue: ROLE.USER
         }
     }, {
-        logging: true
+        logging: true,
+        paranoid: true
     })
 
     User.asscociate = (models) => {

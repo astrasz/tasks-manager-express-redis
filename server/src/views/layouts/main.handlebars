@@ -24,6 +24,7 @@
             display: block;
         }
 
+        #backboard .badge span,
         #tasks-table .badge span {
             position: absolute;
             top: 0;
@@ -174,6 +175,7 @@
                         <a class="nav-link active" aria-current="page" href="/backboard">Back Board</a>
                     </li>
                     {{#if (equal invalidTask undefined )}}
+                    {{#if (equal mainboard true)}}
                     <li class="nav-item">
                         <a class="nav-link text-primary fw-bold" style="cursor: pointer;" data-bs-toggle="modal"
                             data-bs-target="#newTaskModal">
@@ -181,8 +183,9 @@
                         </a>
                     </li>
                     {{/if}}
+                    {{/if}}
                 </ul>
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <ul class="navbar-nav me-3">
                     <li class="nav-item">
                         <a class="nav-link active" href="/logout">Log out</a>
                     </li>
@@ -196,11 +199,14 @@
                     {{/if}}
                 </ul>
                 {{#if loggedIn}}
+                {{#if (equal mainboard true)}}
                 <form class="d-flex" role="search" action="/" method="get">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
                         name="search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
+
+                {{/if}}
                 {{/if}}
             </div>
         </div>

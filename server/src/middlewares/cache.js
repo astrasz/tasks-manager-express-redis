@@ -1,47 +1,63 @@
 import redisClient from '../services/redis.js';
 import { DEFAULT_EXPIRATION } from '../services/redis.js';
 import models from '../models/sequelize.js';
+import { STATE } from '../models/task.js';
 
 const { User, Task } = models;
 
-const cacheTasks = async () => {
+const getTasks = async (isProcessed) => {
+    return await Task.findAll({
+        include: [
+            { model: User, as: 'Owner', attributes: ['id', 'username', 'email'] },
+            { model: User, as: 'Doer', attributes: ['id', 'username', 'email'] },
+            { model: Task, as: 'Associated', attributes: ['id', 'title'] }
+        ],
+        where: {
+            isProcessed
+        }
+    })
+        .catch((err) => { throw err })
+}
 
-    let tasks = await redisClient.get('tasks');
-    if (!(tasks && tasks.length)) {
-
-        tasks = await Task.findAll({
-            include: [
-                { model: User, as: 'Owner', attributes: ['id', 'username', 'email'] },
-                { model: User, as: 'Doer', attributes: ['id', 'username', 'email'] },
-                { model: Task, as: 'Associated', attributes: ['id', 'title'] }
-            ]
-        })
-            .catch((err) => { throw err });
-
-        if (tasks && tasks.length) {
-            redisClient.set('tasks', JSON.stringify(tasks), { EX: DEFAULT_EXPIRATION });
+const addCollectionToCache = async (key, model) => {
+    let collection = await redisClient.get(key);
+    if (!(collection && collection.length)) {
+        switch (model) {
+            case Task:
+                if (key === 'tasks') {
+                    collection = await getTasks(true)
+                } else if (key === 'unprocessed') {
+                    collection = await getTasks(false)
+                }
+                break;
+            case User:
+                collection = await User.findAll({
+                    attributes: ['id', 'username', 'email']
+                })
+                    .catch((err) => { throw err });
+            default:
+                break;
+        }
+        if (collection && collection.length) {
+            await redisClient.set(key, JSON.stringify(collection), { EX: DEFAULT_EXPIRATION })
         }
     }
 }
 
 const cacheUsers = async () => {
-    let users = await redisClient.get('users');
+    await addCollectionToCache('users', User);
+}
 
-    if (!(users && !users.length)) {
-        const users = await User.findAll({
-            attributes: ['id', 'username', 'email']
-        })
-            .catch((err) => { throw err });
+const cacheTasks = async () => {
+    await addCollectionToCache('tasks', Task)
+}
 
-        if (users && users.length) {
-            await redisClient.set('users', JSON.stringify(users), { EX: DEFAULT_EXPIRATION });
-        }
-    }
+const cacheUnprocessedTasks = async () => {
+    await addCollectionToCache('unprocessed', Task);
 }
 
 export const cachTaskById = async (req, res, next) => {
     try {
-
         const condition = !req.originalUrl.includes("favicon");
 
         if (condition) {
@@ -64,19 +80,17 @@ export const cachTaskById = async (req, res, next) => {
             await redisClient.set(cacheKey, JSON.stringify(task), { EX: DEFAULT_EXPIRATION });
             next();
         }
-
         next();
-
     } catch (err) {
         next(err)
     }
-
 }
 
 export const cacheData = async (req, res, next) => {
     try {
         await cacheUsers();
         await cacheTasks();
+        await cacheUnprocessedTasks();
         next();
     } catch (err) {
         next(err)

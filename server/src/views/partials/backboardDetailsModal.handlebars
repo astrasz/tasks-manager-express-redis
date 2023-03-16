@@ -1,0 +1,57 @@
+<div class="modal fade" id="backboardDetailsModal-{{id}}" tabindex="-1" aria-labelledby="backboardDetailsModalLabel"
+    aria-hidden="true" style="overflow-y:scroll;">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div id="task-details" class="card card-margin">
+                <div class="card-body pt-2">
+                    <div class="task-details">
+                        <div class="task-details-title-wrapper">
+                            <div class="task-details-title">
+                                <span class="task-details-pro-title">{{title}}</span>
+                                <span class="task-details-status text-monospace" style="font-family:monospace;">value:
+                                    {{value}}
+                                </span>
+                                <span class="task-details-status text-monospace" style="font-family:monospace;">status:
+                                    <span class="text-white fw-bold bg-dark px-1"
+                                        style="border-radius: 4px;">{{status}}</span>
+                                </span>
+
+                            </div>
+                            <div class="task-details-creator text-monospace" style="font-family:monospace;">
+                                <small class="text-warning fw-bold">created by </small>
+                                <small class="text-muted">{{Owner.username}}</small>
+                                <small class="text-warning fw-bold mt-2">created at </small>
+                                <small class="text-muted">{{dateStandard createdAt}}</small>
+                            </div>
+                        </div>
+                        <div class="task-details-description">
+                            {{description}}
+                        </div>
+                        {{#if Associated}}
+                        <div class="task-details-associated mt-3">
+                            <span>Associated with:</span>
+                            <span>{{Associated.title}}</span>
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    {{#if delete}}
+                    <button class="btn btn-primary btn-sm ms-2" data-bs-toggle="modal"
+                        data-bs-target="#confirmationDeleteModal-{{id}}" data-bs-dismiss="modal">Delete</button>
+                    {{else}}
+                    <div></div>
+                    {{/if}}
+                    <form class="d-flex justify-content-center" action="/{{this.id}}/state?_method=PUT" method="POST">
+                        <button class="btn-primary btn btn-sm p-1" style="border: none;" type="submit">
+                            Move to Main Board
+                        </button>
+                    </form>
+
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

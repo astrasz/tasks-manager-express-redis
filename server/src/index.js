@@ -59,7 +59,7 @@ app.use(routes);
 // errors
 app.use(errorHandler);
 
-sequelize.sync()
+sequelize.sync({ alter: true })
     .then(() => {
         console.log('Database connection has been established');
         const server = app.listen(port, () => console.log(`Server is running on port: ${port}`));

@@ -1,0 +1,21 @@
+<div class="modal fade" id="confirmationMoveModal-{{id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Change board for task "{{title}}"</h5>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to move the task?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form class="d-flex justify-content-center" action="/{{id}}/state?_method=PUT" method="POST">
+                    <button class="btn-primary btn" style="border: none;" type="submit">
+                        Move
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

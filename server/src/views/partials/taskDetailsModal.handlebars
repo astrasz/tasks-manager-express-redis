@@ -6,10 +6,16 @@
             <div id="task-details" class="card card-margin">
                 <div class="card-header no-border">
                     <div class="action-icons">
+                        <div class="flex-grow-1">
+                            <button class="bi bi-slash-circle bg-dark text-{{color}} fw-bold" style="border:
+                                    none; border-radius: 5px; padding: 5px 12px; margin-right: 5px"
+                                data-bs-toggle="modal" data-bs-target="#confirmationMoveModal-{{id}}"
+                                data-bs-dismiss="modal"></button>
+                        </div>
                         {{#if delete}}
                         <button class="bi bi-trash bg-dark text-{{color}}" style="border:
                                     none; border-radius: 5px; padding: 5px 12px; margin-right: 5px"
-                            data-bs-toggle="modal" data-bs-target="#confirmationModal-{{id}}"
+                            data-bs-toggle="modal" data-bs-target="#confirmationDeleteModal-{{id}}"
                             data-bs-dismiss="modal"></button>
                         {{/if}}
                         {{#if edit}}

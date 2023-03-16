@@ -1,24 +1,42 @@
 import redisClient, { DEFAULT_EXPIRATION } from '../services/redis.js';
 import models from '../models/sequelize.js';
-import { STATUS } from '../models/task.js';
+import { STATE, STATUS } from '../models/task.js';
 import taskService from '../services/task.js';
 import { ROLE } from '../models/user.js';
 
 
 const { Task } = models;
 
-export const listUnprocessedTasks = (req, res, next) => {
-    return res.render('backboard', {
-        loggedIn: true,
-        admin: req.user.role === ROLE.ADMIN
-    })
+export const listUnprocessedTasks = async (req, res, next) => {
+    try {
+
+        const error = req.flash('error');
+        const message = req.flash('message');
+
+        const users = JSON.parse(await redisClient.get("users"));
+        let unprocessed = JSON.parse(await redisClient.get("unprocessed"));
+        unprocessed = taskService.prepareUnprocessedToReturn(unprocessed, users, req.user);
+
+        return res.render('backboard', {
+            error,
+            message,
+            tasks: unprocessed,
+            loggedIn: true,
+            admin: req.user.role === ROLE.ADMIN
+        })
+    } catch (err) {
+        console.log('Err: ', err);
+        return res.render('backboard', {
+            error: err.message,
+            loggedIn: true,
+            admin: req.user.role === ROLE.ADMIN,
+        })
+    }
+
 }
-
-
 
 export const listTasks = async (req, res, next) => {
     try {
-
         const error = req.flash('error');
         const message = req.flash('message');
 
@@ -39,16 +57,19 @@ export const listTasks = async (req, res, next) => {
             toDo,
             inProgress,
             done,
-            tasks: toDo.concat(inProgress),
             users,
+            states: { ...STATE },
+            tasks: toDo.concat(inProgress),
             loggedIn: true,
-            admin: req.user.role === ROLE.ADMIN
+            admin: req.user.role === ROLE.ADMIN,
+            mainboard: true
         })
 
     } catch (err) {
         return res.render('tasks', {
             error: err.message,
-            loggedIn: true
+            loggedIn: true,
+            admin: req.user.role === ROLE.ADMIN
         })
     }
 }
@@ -135,6 +156,18 @@ export const updateTask = async (req, res, next) => {
         console.log('Update-error: ', err)
         req.flash('error', err.message);
         return res.redirect('/');
+    }
+}
+
+export const changeState = async (req, res, next) => {
+    try {
+        const { taskId } = req.params;
+        const task = await taskService.changeState(taskId)
+
+        req.flash('message', `Task "${task.title}" is ${task.state ? 'processed' : 'not processed'} now`);
+        return res.redirect('/backboard');
+    } catch (err) {
+        console.log('Err: ', err);
     }
 }
 

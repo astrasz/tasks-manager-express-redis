@@ -32,6 +32,30 @@
             <label for="doer">Assign to</label>
         </div>
         <div class="md-form mb-2">
+            <select class="form-select" id="isProcessed" name="isProcessed">
+                <option selected {{#if isProcessed}} value="{{isProcessed}}" {{/if}}>
+                    {{#if isProcessed}}
+                    {{#if (equal isProcessed true) }}
+                    PROCESSED
+                    {{else}}
+                    UNPROCESSED
+                    {{/if}}
+                    {{/if}}
+                </option>
+                <option {{#if isProcessed}} {{#if (equal isProcessed true) }} value="" {{else}} value="{{true}}" {{/if}}
+                    {{/if}}>
+                    {{#if isProcessed}}
+                    {{#if (equal isProcessed true) }}
+                    UNPROCESSED
+                    {{else}}
+                    PROCESSED
+                    {{/if}}
+                    {{/if}}
+                </option>
+            </select>
+            <label for="doer">State</label>
+        </div>
+        <div class="md-form mb-2">
             {{#if status}}
             <select class="form-select" id="status" name="status">
                 <option selected {{#if status}} value="{{status}}" {{/if}}>
