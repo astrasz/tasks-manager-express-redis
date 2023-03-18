@@ -163,8 +163,11 @@ export const changeState = async (req, res, next) => {
         const { taskId } = req.params;
         const task = await taskService.changeState(taskId)
 
-        req.flash('message', `Task "${task.title}" is ${task.state ? 'processed' : 'not processed'} now`);
-        return res.redirect('/backboard');
+        req.flash('message', `Task "${task.title}" is ${task.isProcessed ? 'processed' : 'not processed'} now`);
+        if (task.isProcessed) {
+            return res.redirect('/backboard');
+        }
+        return res.redirect('/');
     } catch (err) {
         console.log('Err: ', err);
     }
