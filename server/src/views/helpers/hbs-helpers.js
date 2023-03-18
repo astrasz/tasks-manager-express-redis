@@ -22,6 +22,10 @@ export const getMonthFromDate = (date) => {
     return month;
 }
 
+export const getToday = () => {
+    return format((new Date()), 'yyyy-MM-dd');
+}
+
 export const equal = (a, b) => {
     return !!(a === b);
 }

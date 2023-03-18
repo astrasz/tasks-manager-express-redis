@@ -200,9 +200,9 @@
                 </ul>
                 {{#if loggedIn}}
                 {{#if (equal mainboard true)}}
-                <form class="d-flex" role="search" action="/" method="get">
+                <form class="d-flex" role="search" action="/" method="GET">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
-                        name="search">
+                        name="search" {{#if search}} value="{{search}}" autofocus {{/if}}>
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 {{/if}}
@@ -210,7 +210,7 @@
             </div>
         </div>
     </nav>
-    <div class="container p-0" style="max-width: 1400px">
+    <div class="container p-1" style="max-width: 1400px">
         {{{body}}}
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

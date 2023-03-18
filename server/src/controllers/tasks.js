@@ -17,10 +17,14 @@ export const listUnprocessedTasks = async (req, res, next) => {
         let unprocessed = JSON.parse(await redisClient.get("unprocessed"));
         unprocessed = taskService.prepareUnprocessedToReturn(unprocessed, users, req.user);
 
+        const { tasks, search, startDate } = taskService.filter(req.query, unprocessed);
+
         return res.render('backboard', {
             error,
             message,
-            tasks: unprocessed,
+            search,
+            startDate,
+            tasks,
             loggedIn: true,
             admin: req.user.role === ROLE.ADMIN
         })
@@ -32,7 +36,6 @@ export const listUnprocessedTasks = async (req, res, next) => {
             admin: req.user.role === ROLE.ADMIN,
         })
     }
-
 }
 
 export const listTasks = async (req, res, next) => {
@@ -40,14 +43,10 @@ export const listTasks = async (req, res, next) => {
         const error = req.flash('error');
         const message = req.flash('message');
 
-        const { search } = req.query;
-
         const users = JSON.parse(await redisClient.get("users"));
-        let tasks = JSON.parse(await redisClient.get("tasks"));
+        const cachedTasks = JSON.parse(await redisClient.get("tasks"));
 
-        if (search) {
-            tasks = tasks.filter(task => task.title.includes(search) || task.description.includes(search));
-        }
+        const { tasks, search } = taskService.filter(req.query, cachedTasks);
         const { toDo, inProgress, done } = taskService.prepareTasksToReturn(tasks, users, req.user);
 
         return res.render('tasks', {

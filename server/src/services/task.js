@@ -63,6 +63,23 @@ class TaskService {
         return errors.length ? errors : null;
     }
 
+    filter(query, tasks) {
+        const { search, status, endDate, startDate } = query;
+        if (search) {
+            tasks = tasks.filter(task => task.title.includes(search) || task.description.includes(search));
+        }
+
+        if (endDate && startDate) {
+            tasks = tasks.filter(task => task.createdAt >= startDate && task.createdAt <= endDate);
+        }
+
+        if (status) {
+            tasks = tasks.filter(task => task.status === status);
+        }
+
+        return { tasks, search, startDate };
+    }
+
     async getTaskById(id) {
         if (!id) {
             throw new AppError('Task id cannot be null.', 400);

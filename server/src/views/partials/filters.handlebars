@@ -1,53 +1,48 @@
-<div class="filters container mt-2" style="font-family:monospace; width: 100%">
-    <div class="bg-dark p-3 mt-2 mb-2" style="border-radius: 10px">
+<div class="filters container" style="font-family:monospace; width: 100%">
+    <div class="bg-dark p-3 mb-2" style="border-radius: 10px">
         <div class="mb-3">
-            <form class="d-flex" role="search" action="/" method="get">
+            <form class="d-flex" role="search" action="/backboard" method="GET">
                 <input class="form-control me-0" style="line-height: 1rem;" type="search" placeholder="Search"
-                    aria-label="Search" name="search">
+                    aria-label="Search" name="search" {{#if search}} value="{{search}}" autofocus {{/if}}>
                 <button class="btn btn-sm" type="submit">
                     <i class="bi bi-search" style="font-size: 1.25rem; margin-left: 0.25rem"></i>
                 </button>
             </form>
         </div>
         <hr>
-        <form action="">
+        <form action="/backboard" method="GET">
             <div class="d-flex justify-content-start flex-column gap-1">
                 <div class="filters-status mb-2">
                     <p class="">Status</p>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
-                            checked>
-                        <label class="form-check-label small" for="flexRadioDefault1">
-                            ALL
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                        <label class="form-check-label small" for="flexRadioDefault1">
+                        <input class="form-check-input" type="radio" id="statusToDo" name="status" value="TO DO">
+                        <label class="form-check-label small" for="statusToDo">
                             TO DO
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                        <label class="form-check-label small" for="flexRadioDefault2">
+                        <input class="form-check-input" type="radio" id="statusInProgress" name="status"
+                            value="IN PROGRESS">
+                        <label class="form-check-label small" for="statusInProgress">
                             IN PROGRESS
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                        <label class="form-check-label small" for="flexRadioDefault2">
+                        <input class="form-check-input" type="radio" id="statusDone" name="status" value="DONE">
+                        <label class="form-check-label small" for="statusDone">
                             DONE
                         </label>
                     </div>
                 </div>
                 <div class="filters-date mb-3">
-                    <div class="form-check ps-0">
+                    <div class="form-check ps-0 mb-1">
                         <label for="startDate">Start Date</label>
-                        <input id="startDate" class="form-control" type="date" />
+                        <input id="startDate" name="startDate" class="form-control" type="date" />
                     </div>
                     <div class="form-check ps-0">
-                        <label for="startDate">End Date</label>
-                        <input id="startDate" class="form-control" type="date" />
+                        <label for="endDate">End Date</label>
+                        <input id="endDate" name="endDate" class="form-control" type="date" max="{{getToday}}"
+                            value="{{getToday}}" />
                     </div>
                 </div>
                 <div class="filters-buttons d-flex justify-content-center ms-1 gap-3">
