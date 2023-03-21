@@ -33,6 +33,11 @@ const getUserModel = (sequelize, DataTypes) => {
             type: DataTypes.ENUM([ROLE.ADMIN, ROLE.USER]),
             allowNull: false,
             defaultValue: ROLE.USER
+        },
+        isActive: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: true
         }
     }, {
         logging: true,

@@ -1,3 +1,64 @@
-<div class="row justify-content-center mt-5">
-    <p>Admin Board</p>
+<div class="adminboard d-flex flex-wrap mt-5">
+    {{!-- <div class="adminboard__panel row flex-grow-0">
+        <div class="admin-filters container" style="font-family:monospace; width: 100%">
+            <div class="bg-dark p-3 mb-2" style="border-radius: 10px">
+
+            </div>
+
+        </div>
+    </div> --}}
+    <div class="row d-flex flex-row justify-content-center flex-grow-1">
+        {{#if error}}
+        <div class="alert alert-danger mt-1 mb-1" role="alert">
+            {{#each error}}
+            <li>{{this}}</li>
+            {{/each}}
+        </div>
+        {{/if}}
+        {{#if message}}
+        <div class="alert alert-success mt-1 mb-3" role="alert">
+            {{#each message}}
+            <li>{{this}}</li>
+            {{/each}}
+        </div>
+        {{/if}}
+        <div class="d-flex justify-content-center flex-wrap" id="adminboard">
+            <table class="table table-striped table-dark text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">IsActive</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#if users}}
+                    {{#each users}}
+                    <tr>
+                        <th scope="row">{{increment @index}}</th>
+                        <td>{{username}}</td>
+                        <td>{{email}}</td>
+                        <td>{{role}}</td>
+                        <td>
+                            <div class="d-flex justify-content-center">
+                                NO
+                                <div class="form-check form-switch ms-1">
+                                    <input onclick="return false" class="form-check-input flexIsActive" type="checkbox"
+                                        id="flexIsActive-{{id}}" {{#if isActive}} checked {{/if}} data-bs-toggle="modal"
+                                        data-bs-target="#confirmationUserModal-{{id}}" data-bs-dismiss="modal">
+                                    <label class="form-check-label" for="flexIsActive-{{id}}">YES</label>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    {{> confirmationUserModal}}
+                    {{/each}}
+                    {{/if}}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

@@ -5,18 +5,21 @@ const setPassport = (passport, verifyPassword, userModel) => {
         userModel.findOne({ where: { username } })
             .then(user => {
                 if (!user) {
-                    return done(null, false, { message: 'No user with that username' });
+                    return done(null, false, { message: 'No user with that username.' });
                 }
                 verifyPassword(password, user.password, (err, isValid) => {
                     if (err) throw err;
                     if (!isValid) {
-                        return done(null, false, { message: 'Credentials incorrect' });
+                        return done(null, false, { message: 'Credentials incorrect.' });
+                    }
+                    if (!user.isActive) {
+                        return done(null, false, { message: 'Your account is inactive. Contact admin.' })
                     }
                     return done(null, user);
                 })
             })
             .catch((err) => {
-                return done(err, false, { message: 'Credentials incorrect' })
+                return done(err, false, { message: 'Credentials incorrect.' })
             })
 
     }))
@@ -34,7 +37,10 @@ export default setPassport;
 
 export const isAuthenticated = (req, res, next) => {
     if (req.user) {
+        if (!req.user.isActive) {
+            return res.redirect('/logout');
+        }
         return next()
     }
-    res.redirect('/signin');
+    return res.redirect('/signin');
 }

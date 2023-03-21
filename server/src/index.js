@@ -21,9 +21,15 @@ import * as helpers from './views/helpers/hbs-helpers.js'
 const app = express();
 const port = 5000;
 
-//body parser
+// static folder
+app.use(express.static(__dirname + 'public'));
+
+
+// body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
+
+
 
 // passport && session
 setPassport(passport, authService.verifyPassword, models.User);

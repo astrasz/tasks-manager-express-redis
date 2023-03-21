@@ -29,3 +29,7 @@ export const getToday = () => {
 export const equal = (a, b) => {
     return !!(a === b);
 }
+
+export const increment = (value) => {
+    return value + 1;
+}

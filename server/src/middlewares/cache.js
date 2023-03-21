@@ -32,7 +32,7 @@ const addCollectionToCache = async (key, model) => {
                 break;
             case User:
                 collection = await User.findAll({
-                    attributes: ['id', 'username', 'email']
+                    attributes: ['id', 'username', 'email', 'role', 'isActive']
                 })
                     .catch((err) => { throw err });
             default:
