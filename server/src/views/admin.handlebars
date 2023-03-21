@@ -9,7 +9,7 @@
     </div> --}}
     <div class="row d-flex flex-row justify-content-center flex-grow-1">
         {{#if error}}
-        <div class="alert alert-danger mt-1 mb-1" role="alert">
+        <div class="alert alert-danger mt-1 mb-3" role="alert">
             {{#each error}}
             <li>{{this}}</li>
             {{/each}}
@@ -40,7 +40,24 @@
                         <th scope="row">{{increment @index}}</th>
                         <td>{{username}}</td>
                         <td>{{email}}</td>
-                        <td>{{role}}</td>
+                        <td class="d-flex justify-content-center">
+                            <div class="dropdown">
+                                <button class="btn btn-success active btn-sm dropdown-toggle users-role-button"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false" style="width: 10rem;">
+                                    {{role}}
+                                </button>
+                                <ul class="dropdown-menu bg-dark fw-bold" style="line-height: .75rem; cursor: pointer;">
+                                    {{#if (equal role "ROLE_USER")}} <li><a class="dropdown-item"
+                                            href="/admin/users/{{id}}/role?role=ROLE_ADMIN&_method=PUT">ROLE_ADMIN</a>
+                                    </li>
+                                    {{else}}
+                                    <li><a class="dropdown-item"
+                                            href="/admin/users/{{id}}/role?role=ROLE_USER&_method=PUT">ROLE_USER</a>
+                                    </li>
+                                    {{/if}}
+                                </ul>
+                            </div>
+                        </td>
                         <td>
                             <div class="d-flex justify-content-center">
                                 NO

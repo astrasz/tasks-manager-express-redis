@@ -43,6 +43,20 @@ export const changeUserState = async (req, res, next) => {
         req.flash('error', err.message);
         return res.redirect('/admin');
     }
+}
 
+export const changeUserRole = async (req, res, next) => {
+    try {
+        const { role } = req.query;
+        const { userId } = req.params;
 
+        const user = await adminService.changeUserRole(userId, role);
+        req.flash('message', `User's ${user.username} role has been changed`);
+        return res.redirect('/admin');
+
+    } catch (err) {
+        console.log('Err: ', err);
+        req.flash('error', err.message);
+        return res.redirect('/admin');
+    }
 }

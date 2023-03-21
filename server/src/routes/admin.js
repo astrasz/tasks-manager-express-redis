@@ -10,6 +10,7 @@ const router = express.Router();
 
 router.get('/admin', isAuthenticated, authRole(ROLE.ADMIN), cacheData, adminController.showAdminBoard);
 router.put('/admin/users/:userId', isAuthenticated, authRole(ROLE.ADMIN), adminController.changeUserState);
+router.put('/admin/users/:userId/role', isAuthenticated, authRole(ROLE.ADMIN), adminController.changeUserRole);
 
 
 

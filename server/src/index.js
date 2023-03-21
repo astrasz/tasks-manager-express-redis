@@ -16,6 +16,7 @@ import passport from 'passport';
 import setPassport from './middlewares/passport.js';
 import authService from './services/auth.js'
 import * as helpers from './views/helpers/hbs-helpers.js'
+import customMethodOverride from './middlewares/customMethodOverride.js';
 
 
 const app = express();
@@ -58,6 +59,7 @@ app.set('views', './src/views');
 
 // method-override
 app.use(methodOverride('_method'))
+app.use(customMethodOverride);
 
 // routes
 app.use(routes);
