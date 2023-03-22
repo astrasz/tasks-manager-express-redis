@@ -7,7 +7,6 @@ import getTaskModel from './task.js';
 const env = process.env.NODE_ENV ?? 'dev'
 const config = configSettings[env];
 
-
 const sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
     dialect: config.dialect,

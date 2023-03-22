@@ -14,7 +14,7 @@ export const configSettings = {
     "username": "root",
     "password": "root",
     "database": "task-management_test",
-    "host": "127.0.0.1",
+    "host": "postgres",
     "dialect": "postgres"
   },
   "production": {

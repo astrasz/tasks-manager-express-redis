@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "env NODE_ENV='test' mocha 'src/test/**/*.js' --reporter spec",
     "start": "nodemon -L"
   },
   "keywords": [],
@@ -14,6 +14,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.1",
+    "chai-as-promised": "^7.1.1",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.6",
     "date-fns": "^2.29.3",
