@@ -1,18 +1,5 @@
 <div class="mt-5">
-    {{#if error}}
-    <div class="alert alert-danger mt-1" role="alert">
-        {{#each error}}
-        <li>{{this}}</li>
-        {{/each}}
-    </div>
-    {{/if}}
-    {{#if message}}
-    <div class="alert alert-success mt-1" role="alert">
-        {{#each message}}
-        <li>{{this}}</li>
-        {{/each}}
-    </div>
-    {{/if}}
+    {{> messagesBlock}}
 </div>
 <div class="backboard-content d-flex flex-wrap" style="overflow-x: hidden;">
     <div class="backboard-content__panel row flex-grow-0" style="width: 20rem">

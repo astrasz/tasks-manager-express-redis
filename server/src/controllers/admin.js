@@ -1,17 +1,17 @@
 import { ROLE } from "../models/user.js";
-import redisClient from "../services/redis.js";
-import adminService from "../services/admin.js"
+import adminService from "../services/AdminService.js"
 
 
 export const showAdminBoard = async (req, res, next) => {
     try {
-
+        const { search } = req.query;
         const error = req.flash('error');
         const message = req.flash('message');
 
-        const users = JSON.parse(await redisClient.get('users'));
+        const users = await adminService.getUsers(search);
 
         res.render('admin', {
+            search,
             error,
             message,
             users,

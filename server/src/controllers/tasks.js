@@ -1,7 +1,7 @@
-import redisClient, { DEFAULT_EXPIRATION } from '../services/redis.js';
+import redisClient from '../services/RedisService.js';
 import models from '../models/sequelize.js';
 import { STATE, STATUS } from '../models/task.js';
-import taskService from '../services/task.js';
+import taskService from '../services/TaskService.js';
 import { ROLE } from '../models/user.js';
 
 
@@ -17,11 +17,12 @@ export const listUnprocessedTasks = async (req, res, next) => {
         let unprocessed = JSON.parse(await redisClient.get("unprocessed"));
         unprocessed = taskService.prepareUnprocessedToReturn(unprocessed, users, req.user);
 
-        const { tasks, search, startDate } = taskService.filter(req.query, unprocessed);
+        const { tasks, search, startDate, status } = taskService.filter(req.query, unprocessed);
 
         return res.render('backboard', {
             error,
             message,
+            status,
             search,
             startDate,
             tasks,

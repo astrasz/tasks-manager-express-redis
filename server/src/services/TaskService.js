@@ -2,19 +2,23 @@ import { STATE, STATUS } from '../models/task.js';
 import { trimText } from '../utils/string-formatter.js';
 import models from '../models/sequelize.js';
 import * as tasksPermissions from '../permissions/task.js';
-import AppError from '../errors/appError.js';
-import redisClient, { DEFAULT_EXPIRATION } from '../services/redis.js';
+import redisClient from '../services/RedisService.js';
+import AbstractService from './AbstractService.js';
+import InvalidActionError from '../errors/InvalidActionError.js';
+import InvalidCacheObjectError from '../errors/InvalidCacheObjectError.js';
+import NotFoundItemError from '../errors/NotFoundItemError.js';
+import InvalidPermissionsError from "../errors/InvalidPermissionsError.js"
 
-class TaskService {
+class TaskService extends AbstractService {
 
     taskState = STATE;
     taskStatus = STATUS;
-    expiration = DEFAULT_EXPIRATION;
+    taskModel = this.models.Task;
 
-    constructor(trimText, tasksPermissions, tasksModel, redisClient) {
+    constructor(trimText, tasksPermissions, models, redisClient) {
+        super(models, redisClient);
         this.trimText = trimText;
         this.permissions = tasksPermissions;
-        this.tasksModel = tasksModel;
         this.client = redisClient;
     }
 
@@ -77,27 +81,27 @@ class TaskService {
             tasks = tasks.filter(task => task.status === status);
         }
 
-        return { tasks, search, startDate };
+        return { tasks, search, startDate, status };
     }
 
     async getTaskById(id) {
         if (!id) {
-            throw new AppError('Task id cannot be null.', 400);
+            throw new InvalidActionError('Task id cannot be null.');
         }
 
         let task = await this.client.get(`tasks:${id}`, (error, task) => {
             if (error) {
-                throw new AppError('Cache error, try again.')
+                throw new InvalidCacheObjectError('Cache error, try again.');
             }
 
-            if (JSON.parse(task) instanceof this.tasksModel) {
+            if (JSON.parse(task) instanceof this.taskModel) {
                 return task;
             }
         })
-        if (task instanceof this.tasksModel) {
+        if (task instanceof this.taskModel) {
             return task;
         }
-        throw new AppError('Cache error, try again.');
+        throw new InvalidCacheObjectError('Cache error, try again.');
     }
 
     async createNew(body, ownerId) {
@@ -114,7 +118,7 @@ class TaskService {
     }
 
     async saveNew(payload, ownerId) {
-        return await this.tasksModel.create({
+        return await this.taskModel.create({
             ...payload,
             ownerId,
             associatedId: !!payload.associatedId ? payload.associatedId : null,
@@ -123,31 +127,15 @@ class TaskService {
         })
     }
 
-    async updateCache(task = null, taskId = null) {
-        if (task) {
-            const cacheKey = `tasks:${task.id}`;
-            await this.client.set(cacheKey, JSON.stringify(task), { EX: this.expiration });
-        }
-
-        if (taskId) {
-            const cacheKey = `tasks:${taskId}`;
-            const isSet = this.client.keys(cacheKey);
-            isSet && await this.client.del(cacheKey);
-        }
-
-        await this.client.del('tasks');
-        await this.client.del('unprocessed');
-    }
-
     async update(body, id, currentUser) {
-        const task = await this.tasksModel.findByPk(id);
+        const task = await this.taskModel.findByPk(id);
 
-        if (!(task instanceof this.tasksModel)) {
-            throw new AppError("Task cannot be found.", 400);
+        if (!(task instanceof this.taskModel)) {
+            throw new NotFoundItemError("Task cannot be found.");
         }
 
         if (!this.permissions.canEdit(currentUser, task)) {
-            throw new AppError('You do not have the permission.', 401);
+            throw new InvalidPermissionsError('You do not have the permission.');
         }
 
         const errors = this.returnErrorsOrPayloadValid(body);
@@ -168,10 +156,10 @@ class TaskService {
 
 
     async changeState(id) {
-        let task = await this.tasksModel.findByPk(id);
+        let task = await this.taskModel.findByPk(id);
 
-        if (!(task instanceof this.tasksModel)) {
-            throw new AppError("Task cannot be found.", 400);
+        if (!(task instanceof this.taskModel)) {
+            throw new NotFoundItemError("Task cannot be found.");
         }
 
         await task.update({
@@ -185,21 +173,21 @@ class TaskService {
     }
 
     async remove(id, currentUser) {
-        const task = await this.tasksModel.findByPk(id);
+        const task = await this.taskModel.findByPk(id);
 
-        if (!(task instanceof this.tasksModel)) {
-            throw new AppError("Task cannot be found.", 400);
+        if (!(task instanceof this.taskModel)) {
+            throw new NotFoundItemError("Task cannot be found.");
         }
 
         if (!this.permissions.canDelete(currentUser, task)) {
-            throw new AppError('You do not have the permission.', 401);
+            throw new InvalidPermissionsError('You do not have the permission.');
         }
         const { title } = task;
         await task.destroy();
-        await this.updateCache(null, task.id)
+        await this.updateCache(null, task.id, 'task')
 
         return title;
     }
 }
 
-export default new TaskService(trimText, tasksPermissions, models.Task, redisClient);
+export default new TaskService(trimText, tasksPermissions, models, redisClient);

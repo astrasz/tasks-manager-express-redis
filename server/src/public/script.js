@@ -6,7 +6,7 @@ if (usersRoleButtons) {
         let clickNumber = 1;
         button.addEventListener('click', () => {
             if (clickNumber === 1) {
-                alert("Do you really want to change user's role?")
+                alert("Be careful! You are trying to change the user's role.")
             }
         })
     }

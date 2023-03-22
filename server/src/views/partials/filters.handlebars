@@ -15,20 +15,23 @@
                 <div class="filters-status mb-2">
                     <p class="">Status</p>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" id="statusToDo" name="status" value="TO DO">
+                        <input class="form-check-input" {{#if (equal status "TO DO" )}} style="background-color: green;"
+                            {{/if}} type="radio" id="statusToDo" name="status" value="TO DO">
                         <label class="form-check-label small" for="statusToDo">
                             TO DO
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" id="statusInProgress" name="status"
-                            value="IN PROGRESS">
+                            value="IN PROGRESS" {{#if (equal status "IN PROGRESS" )}} style="background-color: green;"
+                            {{/if}}>
                         <label class="form-check-label small" for="statusInProgress">
                             IN PROGRESS
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" id="statusDone" name="status" value="DONE">
+                        <input class="form-check-input" type="radio" id="statusDone" name="status" value="DONE" {{#if
+                            (equal status "DONE" )}} style="background-color: green;" {{/if}}>
                         <label class="form-check-label small" for="statusDone">
                             DONE
                         </label>
@@ -36,8 +39,10 @@
                 </div>
                 <div class="filters-date mb-3">
                     <div class="form-check ps-0 mb-1">
-                        <label for="startDate">Start Date</label>
-                        <input id="startDate" name="startDate" class="form-control" type="date" />
+                        <label for="startDate">Start Date {{#if startDate}}<span
+                                class="fw-bold h6 text-warning">{{startDate}}</span>
+                            {{/if}}</label>
+                        <input id="startDate" name="startDate" class="form-control" type="date">
                     </div>
                     <div class="form-check ps-0">
                         <label for="endDate">End Date</label>
@@ -49,7 +54,7 @@
                     <button class="btn btn-primary" type="submit">
                         Filter
                     </button>
-                    <button class="btn btn-secondary">
+                    <button class="btn btn-secondary ">
                         Clear
                     </button>
                 </div>

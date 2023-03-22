@@ -1,6 +1,6 @@
-import authService from '../services/auth.js'
+import authService from '../services/AuthService.js'
 import passport from 'passport';
-import redisClient from '../services/redis.js';
+import redisClient from '../services/RedisService.js';
 
 export const showSignupForm = (req, res, next) => {
 

@@ -14,7 +14,7 @@ import routes from './routes/routes.js'
 import errorHandler from './middlewares/errorHandler.js';
 import passport from 'passport';
 import setPassport from './middlewares/passport.js';
-import authService from './services/auth.js'
+import authService from './services/AuthService.js'
 import * as helpers from './views/helpers/hbs-helpers.js'
 import customMethodOverride from './middlewares/customMethodOverride.js';
 
@@ -25,12 +25,9 @@ const port = 5000;
 // static folder
 app.use(express.static(__dirname + 'public'));
 
-
 // body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
-
-
 
 // passport && session
 setPassport(passport, authService.verifyPassword, models.User);
@@ -46,7 +43,6 @@ app.use(flash())
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 // view engine
 app.engine('handlebars', engine({

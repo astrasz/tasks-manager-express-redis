@@ -1,7 +1,5 @@
-import redisClient from '../services/redis.js';
-import { DEFAULT_EXPIRATION } from '../services/redis.js';
+import redisClient, { DEFAULT_EXPIRATION } from '../services/RedisService.js';
 import models from '../models/sequelize.js';
-import { STATE } from '../models/task.js';
 
 const { User, Task } = models;
 

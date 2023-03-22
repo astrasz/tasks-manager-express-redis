@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import AppError from '../errors/appError.js';
+import AuthError from '../errors/AuthError.js';
 import models from '../models/sequelize.js';
 import bcrypt from 'bcryptjs'
 
@@ -36,7 +36,7 @@ class AuthService {
         }
 
         if (errors.length) {
-            throw new AppError(errors, 400);
+            throw new AuthError(errors, 400);
         }
 
         const user = await models.User.findOne({
@@ -50,7 +50,7 @@ class AuthService {
 
         if (user instanceof models.User) {
             errors.push('Email or username already taken');
-            throw new AppError(errors, 400);
+            throw new AuthError(errors, 400);
         }
     }
 
